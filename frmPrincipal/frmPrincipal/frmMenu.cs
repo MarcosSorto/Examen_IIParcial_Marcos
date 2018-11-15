@@ -32,5 +32,17 @@ namespace frmPrincipal
                 this.Close();
             }
         }
+
+        /// <summary>
+        /// crea una instancia del formulario de agregar y lo muestra
+        /// en la pantalla
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnAgregar_Click(object sender, EventArgs e)
+        {
+            frmAgregarCancion nuevo = new frmAgregarCancion();
+            nuevo.ShowDialog();
+        }
     }
 }
