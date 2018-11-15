@@ -77,5 +77,45 @@ namespace frmPrincipal.Clases
             }
 
         }
+
+        public static bool EliminarCancion(Cancion laCancion)
+        {
+            Conexion conn = new Conexion(@"(local)\sqlexpress", "BulletProofRecords");
+
+            // enviamos y especificamos el comando a ejecutar
+            SqlCommand cmd = conn.EjecutarComando("sp_EliminarCanciones");
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            // agregamos los parámetros que son requeridos
+
+            cmd.Parameters.Add(new SqlParameter("@nombre", SqlDbType.NVarChar, 200));
+            cmd.Parameters["@nombre"].Value = laCancion.nombre;
+
+           
+
+            // intentamos insertar la nueva canción
+            try
+            {
+                // establecemos la conexión
+                conn.EstablecerConexion();
+
+                // ejecutamos el comando
+                cmd.ExecuteNonQuery();
+
+                return true;
+
+            }
+            catch (SqlException ex)
+            {
+
+                MessageBox.Show(ex.Message + ex.StackTrace + "Detalles de la excepción");
+                return false;
+            }
+            finally
+            {
+                conn.CerrarConexion();
+            }
+
+        }
     }
 }

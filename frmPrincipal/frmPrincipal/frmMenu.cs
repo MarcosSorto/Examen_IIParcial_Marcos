@@ -44,5 +44,16 @@ namespace frmPrincipal
             frmAgregarCancion nuevo = new frmAgregarCancion();
             nuevo.ShowDialog();
         }
+
+        /// <summary>
+        /// Crea una instancia del formulario eliminar y lo muestra
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            frmEliminar nuevo = new frmEliminar();
+            nuevo.ShowDialog();
+        }
     }
 }
