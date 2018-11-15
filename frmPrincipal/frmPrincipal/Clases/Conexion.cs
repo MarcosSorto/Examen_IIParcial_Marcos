@@ -60,5 +60,7 @@ namespace frmPrincipal.Clases
         {
             conn.Close();
         }
+        
+        
     }
 }

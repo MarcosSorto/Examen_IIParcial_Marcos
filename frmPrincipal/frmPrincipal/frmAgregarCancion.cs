@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data;
+using System.Data.SqlClient;
 
 // utilizamos el namespaces para acceder a la carpeta.
 using frmPrincipal.Clases;
@@ -23,7 +25,7 @@ namespace frmPrincipal
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             //verificamos que todos los datos sean ingresados
-            if(txtNombre.Text =="" || txtArtista.Text==""||txtAlbum.Text=="" ||txtGenero.Text=="" || txtAnio.Text == "")
+            if (txtNombre.Text == "" ||lstArtista.SelectedIndex ==-1 || lstAlbum.SelectedIndex ==-1|| txtGenero.Text == "" || txtAnio.Text == "")
             {
                 MessageBox.Show("Hay datos que aún no se ingresan. ¡Revise!", "Error en Ingreso", MessageBoxButtons.OK);
             }
@@ -34,8 +36,8 @@ namespace frmPrincipal
 
                 // llenamos los datos correspondientes
                 nueva.nombre = txtNombre.Text;
-                nueva.album = Convert.ToInt16(txtAlbum.Text);
-                nueva.artista = Convert.ToInt16(txtArtista.Text);
+                nueva.album = lstAlbum.SelectedItem.ToString();
+                nueva.artista = lstArtista.SelectedItem.ToString();
                 nueva.genero = txtGenero.Text;
                 nueva.anio = txtAnio.Text;
 
@@ -43,7 +45,7 @@ namespace frmPrincipal
                 if (Cancion.InsertarCancion(nueva))
                 {
                     MessageBox.Show("La canción se guardó correctamente");
-
+                    limpiar();
                 }
                 else
                 {
@@ -64,10 +66,102 @@ namespace frmPrincipal
         {
             txtNombre.Text = "";
             txtGenero.Text = "";
-            txtAlbum.Text = "";
+            lstArtista.SelectedIndex = -1;
             txtAnio.Text = "";
-            txtArtista.Text = "";
+            lstAlbum.SelectedIndex = -1;
             txtNombre.Focus();
         }
+
+        /// <summary>
+        /// se encarga de inicializar y cargar los datos en las listas.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void frmAgregarCancion_Load(object sender, EventArgs e)
+        {
+
+            llenarAlbum();
+            LlenarArtista();
+
+        }
+        public void llenarAlbum()
+        {
+            //instanciamos la conexión
+            Conexion conn = new Conexion(@"(local)\sqlexpress", "BulletProofRecords");
+
+            //definimos el query
+            string sql = "Select Nombre FROM Music.Album";
+
+            //definimos el commando
+            SqlCommand cmd = conn.EjecutarComando(sql);
+
+            try
+            {
+                // establecemos conexion
+                conn.EstablecerConexion();
+
+                // Ejecutamos el query via un DataReader y llenamos el listbox
+                SqlDataReader rdr = cmd.ExecuteReader();
+
+
+                while (rdr.Read())
+                {
+                    lstAlbum.Items.Add(rdr[0].ToString());
+                    lstAlbum.Items.Add("\n");
+
+                }
+
+
+            }
+            catch (SqlException ex)
+            {
+
+                MessageBox.Show(ex.Message + ex.StackTrace + "Detalles de la exepcion");
+            }
+            finally
+            {
+                conn.CerrarConexion();
+            }
+        }
+
+        public void LlenarArtista()
+        {
+            //instanciamos la conexión
+            Conexion conn = new Conexion(@"(local)\sqlexpress", "BulletProofRecords");
+
+            //definimos el query
+            string sql1 = "Select Nombre FROM Music.Artista WHERE Estado = 1";
+
+            //definimos el commando
+            SqlCommand cmd1 = conn.EjecutarComando(sql1);
+            try
+            {
+                // establecemos conexion
+                conn.EstablecerConexion();
+
+                // Ejecutamos el query via un DataReader y llenamos el listbox
+                SqlDataReader rdr = cmd1.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    lstArtista.Items.Add(rdr[0].ToString());
+                    lstArtista.Items.Add("\n");
+
+                }
+             
+
+
+            }
+            catch (SqlException ex)
+            {
+
+                MessageBox.Show(ex.Message + ex.StackTrace + "Detalles de la exepcion");
+            }
+            finally
+            {
+                conn.CerrarConexion();
+            }
+        }
     }
-}
+    }
+

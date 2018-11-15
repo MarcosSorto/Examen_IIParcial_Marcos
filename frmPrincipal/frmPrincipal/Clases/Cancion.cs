@@ -16,8 +16,8 @@ namespace frmPrincipal.Clases
         // definimos las propiedades de la clase
         public int id { get; set; }
         public string nombre { get; set; }
-        public int artista { get; set; }
-        public int album { get; set; }
+        public string artista { get; set; }
+        public string album { get; set; }
         public string genero { get; set; }
         public string anio { get; set; }
         
@@ -41,10 +41,10 @@ namespace frmPrincipal.Clases
             cmd.Parameters.Add(new SqlParameter("@nombre", SqlDbType.NVarChar, 200));
             cmd.Parameters["@nombre"].Value = laCancion.nombre;
 
-            cmd.Parameters.Add(new SqlParameter("@artista", SqlDbType.Int,10));
+            cmd.Parameters.Add(new SqlParameter("@artista", SqlDbType.NVarChar,150));
             cmd.Parameters["@artista"].Value = laCancion.artista;
 
-            cmd.Parameters.Add(new SqlParameter("@album", SqlDbType.Int,10));
+            cmd.Parameters.Add(new SqlParameter("@album", SqlDbType.NVarChar,150));
             cmd.Parameters["@album"].Value = laCancion.album;
 
             cmd.Parameters.Add(new SqlParameter("@genero", SqlDbType.NVarChar, 100));
@@ -75,6 +75,7 @@ namespace frmPrincipal.Clases
             {
                 conn.CerrarConexion();
             }
+
         }
     }
 }
